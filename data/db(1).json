@@ -1,0 +1,30 @@
+{
+  "profile": {
+    "nama": "Nazwa",
+    "nim": "20241010",
+    "kelas": "TI24D"
+  },
+  "materi": [
+    {
+      "id": "materi-1",
+      "matkul": "Pemrograman Web",
+      "judul": "Pengenalan HTML, CSS & JavaScript",
+      "catatan": "Pelajari dasar penulisan tag dan manipulasi DOM.",
+      "filePath": "",
+      "fileName": ""
+    }
+  ],
+  "tugas": [
+    {
+      "id": "tugas-1",
+      "matkul": "Basis Data (Basdat)",
+      "judul": "Membuat ERD Sistem Informasi Kampus",
+      "deadline": "2026-11-05T23:59",
+      "catatan": "Kumpulkan dalam bentuk PDF atau gambar.",
+      "filePath": "",
+      "fileName": "",
+      "status": "Belum Dikerjakan",
+      "history": []
+    }
+  ]
+}

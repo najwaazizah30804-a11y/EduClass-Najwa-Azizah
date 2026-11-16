@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduClass 🎀 Portal Kuliah Nazwa</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- CONTAINER NOTIFIKASI DEADLINE / ALERT -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- SCREEN 1: HALAMAN LOGIN AWAL -->
+    <div id="loginPage" class="login-page-container">
+        <div class="glass-login-card">
+            <div class="cute-badge-title">
+                <i class="fa-solid fa-sparkles"></i> Welcome Back
+            </div>
+            <h2>Login</h2>
+            <p class="subtitle">Enter your secret credentials to open your class portal</p>
+            
+            <form id="mainLoginForm" onsubmit="handleMainLogin(event)">
+                <div class="input-field-group">
+                    <input type="text" id="loginUsername" placeholder="User Name" required autocomplete="off">
+                    <i class="fa-regular fa-user field-icon"></i>
+                </div>
+
+                <div class="input-field-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <i class="fa-regular fa-eye-slash field-icon" id="togglePasswordIcon" onclick="togglePasswordVisibility()"></i>
+                </div>
+
+                <div class="remember-me-container">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-label">Remember me</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-gradient-login">
+                    Login <i class="fa-solid fa-heart" style="margin-left:5px;"></i>
+                </button>
+            </form>
+
+            <div class="signup-prompt">
+                Don't have an account? <a href="#" onclick="alert('Pendaftaran akun dikelola oleh Nazwa.')">Signup</a>
+            </div>
+
+            <div class="card-footer-credit">
+                Created by <span>Nazwa TI24D ✨</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: DASHBOARD UTAMA -->
+    <div id="dashboardPage" class="dashboard-container" style="display: none;">
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <div class="brand-icon-wrapper">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span>EduClass 🎀</span>
+            </div>
+            
+            <!-- JAM DIGITAL REAL TIME WIB -->
+            <div class="digital-clock-container">
+                <div id="realtimeClock" class="clock-time"><i class="fa-regular fa-clock"></i> 00:00:00 WIB</div>
+                <div id="realtimeDate" class="clock-date">Memuat tanggal...</div>
+            </div>
+
+            <div class="nav-items">
+                <!-- TOGGLE LIGHT/DARK MODE -->
+                <button id="themeToggleBtn" class="btn-theme-toggle" onclick="toggleTheme()" title="Ganti Tema">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+
+                <!-- SEARCH BOX -->
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Cari materi atau tugas..." onkeyup="filterData()">
+                </div>
+            </div>
+        </nav>
+
+        <!-- CONTAINER LAYOUT UTAMA WITH SIDEBAR -->
+        <div class="app-layout">
+            
+            <!-- SIDEBAR NAVIGASI LENGKAP -->
+            <aside class="sidebar-nav">
+                <div class="sidebar-profile-box">
+                    <div class="profile-avatar">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <h4 id="sidebarNama">Nazwa</h4>
+                    <p id="sidebarNimClass" class="profile-sub">TI24D</p>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item active" onclick="switchSection('dashboard')">
+                        <i class="fa-solid fa-house-chimney"></i> <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" onclick="switchSection('materi')">
+                        <i class="fa-solid fa-book-open-reader"></i> <span>Materi Kuliah</span>
+                    </li>
+                    <li class="nav-item" onclick="switchSection('tugas')">
+                        <i class="fa-solid fa-calendar-check"></i> <span>Tugas & Deadline</span>
+                    </li>
+                    <li class="nav-item" onclick="openProfileModal()">
+                        <i class="fa-solid fa-user-gear"></i> <span>Profile Saya</span>
+                    </li>
+                    <li class="nav-item nav-logout" onclick="handleLogout()">
+                        <i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <main class="main-content-area">
+                
+                <!-- SECTION 1: DASHBOARD VIEW -->
+                <section id="sectionDashboard" class="page-section active">
+                    <!-- CUTE WELCOME BANNER WITH 4 STAT CARDS -->
+                    <div class="cute-welcome-banner">
+                        <div class="banner-text">
+                            <h2>Halo, Nazwa! ✨🌸</h2>
+                            <p>Selamat datang kembali di portal perkuliahanmu. Cek ringkasan tugas dan materi terkini di bawah ini!</p>
+                        </div>
+                        <div class="banner-decoration">
+                            <i class="fa-solid fa-cloud-sun"></i>
+                        </div>
+                    </div>
+
+                    <!-- 4 KOTAK STATISTIK DASHBOARD -->
+                    <div class="dashboard-stats-grid">
+                        <div class="stat-card stat-blue">
+                            <div class="stat-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statTotalMateri">0</h3>
+                                <p>Total Materi</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card stat-purple">
+                            <div class="stat-icon"><i class="fa-solid fa-list-check"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statTotalTugas">0</h3>
+                                <p>Total Tugas</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card stat-green">
+                            <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statTugasSelesai">0</h3>
+                                <p>Tugas Selesai</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card stat-pink">
+                            <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statTugasBelumSelesai">0</h3>
+                                <p>Belum Selesai</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT TASKS & NOTIFICATIONS PREVIEW -->
+                    <div class="dashboard-overview-box">
+                        <h3><i class="fa-solid fa-bell"></i> Ringkasan Deadline Mendatang</h3>
+                        <div id="dashboardDeadlineAlerts" class="dashboard-alerts-list"></div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: MATERI KULIAH VIEW -->
+                <section id="sectionMateri" class="page-section">
+                    <div class="section-header-bar">
+                        <h2><i class="fa-solid fa-book-open-reader"></i> Daftar Materi Kuliah</h2>
+                        
+                        <div class="filter-and-add">
+                            <!-- FILTER BY MATA KULIAH -->
+                            <select id="filterMatkulMateri" class="cute-select" onchange="applyFilters()">
+                                <option value="ALL">Semua Mata Kuliah</option>
+                            </select>
+                            <button class="btn btn-primary-cute" onclick="openFormModal('materi')">
+                                <i class="fa-solid fa-plus-circle"></i> Upload Materi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="materiList" class="grid-container"></div>
+                </section>
+
+                <!-- SECTION 3: TUGAS & DEADLINE VIEW -->
+                <section id="sectionTugas" class="page-section">
+                    <div class="section-header-bar">
+                        <h2><i class="fa-solid fa-calendar-check"></i> Tugas & Deadline</h2>
+                        
+                        <div class="filter-and-add">
+                            <!-- FILTER BY MATA KULIAH TUGAS -->
+                            <select id="filterMatkulTugas" class="cute-select" onchange="applyFilters()">
+                                <option value="ALL">Semua Mata Kuliah</option>
+                            </select>
+                            <button class="btn btn-pink-cute" onclick="openFormModal('tugas')">
+                                <i class="fa-solid fa-plus-circle"></i> Tambah Tugas
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="tugasList" class="grid-container"></div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT PROFIL -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('profileModal')">&times;</span>
+            <h2><i class="fa-solid fa-sparkles"></i> Edit Profile Saya</h2>
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label>Nama Asli</label>
+                    <input type="text" id="inputNama" required>
+                </div>
+                <div class="form-group">
+                    <label>NIM</label>
+                    <input type="text" id="inputNim" required>
+                </div>
+                <div class="form-group">
+                    <label>Kelas</label>
+                    <input type="text" id="inputKelas" required>
+                </div>
+                <button type="submit" class="btn btn-primary-cute btn-full">Simpan Perubahan ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL TAMBAH/EDIT DATA (MATERI & TUGAS) -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('formModal')">&times;</span>
+            <h2 id="modalFormTitle">Tambah Data</h2>
+            <form id="dataForm" onsubmit="handleSaveData(event)">
+                <input type="hidden" id="editItemId">
+                <input type="hidden" id="formDataType" value="materi">
+                
+                <div class="form-group">
+                    <label>Mata Kuliah</label>
+                    <input type="text" id="formMatkul" required placeholder="Contoh: Pemrograman Web">
+                </div>
+
+                <div class="form-group">
+                    <label>Judul / Deskripsi Ringkas</label>
+                    <input type="text" id="formJudul" required placeholder="Contoh: Modul 1 / Tugas Akhir">
+                </div>
+
+                <div id="fieldDeadline" class="form-group" style="display: none;">
+                    <label>Deadline / Batas Waktu</label>
+                    <input type="datetime-local" id="formDeadline">
+                </div>
+
+                <div id="fieldStatus" class="form-group" style="display: none;">
+                    <label>Status Tugas</label>
+                    <select id="formStatus" class="cute-select" style="width: 100%;">
+                        <option value="Belum Dikerjakan">Belum Dikerjakan</option>
+                        <option value="Sedang Dikerjakan">Sedang Dikerjakan</option>
+                        <option value="Selesai">Selesai</option>
+                        <option value="Terlambat">Terlambat</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload File Lampiran (PDF/Doc/PPT/ZIP/Foto)</label>
+                    <input type="file" id="formFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.png,.jpg">
+                    <small id="fileInfoText" style="color: #64748b; display: block; margin-top: 5px;"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Catatan Tambahan / Link Pendukung</label>
+                    <textarea id="formCatatan" rows="3" placeholder="Catatan penting atau instruksi..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary-cute btn-full">Simpan Data ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL UPLOAD PENGUMPULAN TUGAS -->
+    <div id="submitModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('submitModal')">&times;</span>
+            <h2><i class="fa-solid fa-cloud-arrow-up"></i> Kumpulkan Tugas</h2>
+            <p id="submitTaskTitle" style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;"></p>
+            <form id="submitTaskForm" onsubmit="handleUploadTugas(event)">
+                <input type="hidden" id="submitTaskId">
+                <div class="form-group">
+                    <label>Upload File Jawaban Tugas (PDF/Doc/ZIP/Foto)</label>
+                    <input type="file" id="submitFile" required accept=".pdf,.doc,.docx,.zip,.rar,.png,.jpg">
+                </div>
+                <button type="submit" class="btn btn-pink-cute btn-full">Kirim Tugas Sekarang 💖</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL RIWAYAT PENGUMPULAN TUGAS (HISTORY LOG) -->
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('historyModal')">&times;</span>
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pengumpulan Tugas</h2>
+            <p id="historyTaskTitle" style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;"></p>
+            
+            <div id="historyListContainer" class="history-list-container"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
